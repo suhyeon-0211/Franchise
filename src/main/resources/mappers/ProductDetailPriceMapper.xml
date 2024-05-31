@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.franchise.Franchise.mapper.ProductDetailPriceMapper">
+    <select id="selectProductDetailSaleAndCnt" parameterType="map" resultType="com.franchise.Franchise.dto.ProductSaleAndCnt">
+        SELECT p.storeId,
+            p.`id` AS productId,
+		    p.`name`,
+            pdp.`id` AS productDetailPriceId,
+            pdp.`productUnit`, 
+            pdp.`productAmount`, 
+            COALESCE(SUM(od.orderAmount),0) AS totalSalesCount
+        FROM product_detail_price AS pdp
+        LEFT JOIN order_detail AS od ON pdp.id = od.productPriceId AND od.state = "ACTIVATE" AND od.updatedAt BETWEEN date(#{startDate}) and DATE_ADD(date(#{endDate}), INTERVAL 1 DAY)
+        LEFT JOIN product AS p ON p.id = pdp.productId
+        GROUP BY pdp.id
+        ORDER BY totalSalesCount DESC;
+    </select>
+
+    <select id="selectProductDetailSaleAndCntByStoreId" parameterType="map" resultType="com.franchise.Franchise.dto.ProductSaleAndCnt">
+        SELECT p.storeId,
+            p.`id` AS productId,
+		    p.`name`,
+            pdp.`id` AS productDetailPriceId,
+            pdp.`productUnit`, 
+            pdp.`productAmount`, 
+            COALESCE(SUM(od.orderAmount),0) AS totalSalesCount
+        FROM product_detail_price AS pdp
+        LEFT JOIN order_detail AS od ON pdp.`id` = od.productPriceId AND od.state = "ACTIVATE" AND od.updatedAt BETWEEN date(#{startDate}) and DATE_ADD(date(#{endDate}), INTERVAL 1 DAY)
+        LEFT JOIN product AS p ON p.`id` = pdp.productId
+        WHERE p.storeId = #{storeId}
+        GROUP BY pdp.id
+        ORDER BY totalSalesCount DESC;
+    </select>
+
+    <select id="selectProductDetailSalePerDay" parameterType="map" resultType="com.franchise.Franchise.dto.ProductSalePerDay">
+        SELECT p.`id` AS productId, 
+                p.name, 
+                pdp.`id` AS productDetailPriceId, 
+                pdp.productUnit, 
+                pdp.productAmount, 
+                COALESCE(SUM(od.orderAmount),0) AS totalSalesCount, 
+                DATE_FORMAT(od.updatedAt, "%Y-%m-%d") AS orderDate
+        FROM product_detail_price AS pdp
+        LEFT JOIN order_detail AS od ON pdp.id = od.productPriceId AND od.state = "ACTIVATE" AND od.updatedAt BETWEEN date(#{startDate}) and DATE_ADD(date(#{endDate}), INTERVAL 1 DAY)
+        LEFT JOIN product AS p ON p.`id` = pdp.productId
+        GROUP BY DATE_FORMAT(od.updatedAt, '%Y-%m-%d'), pdp.`id`
+        ORDER BY orderDate, totalSalesCount DESC;
+    </select>
+    <select id="selectProductDetailSalePerDayByStoreId" parameterType="map" resultType="com.franchise.Franchise.dto.ProductSalePerDay">
+        SELECT p.`id` AS productId, 
+                p.name, 
+                pdp.`id` AS productDetailPriceId, 
+                pdp.productUnit, 
+                pdp.productAmount, 
+                COALESCE(SUM(od.orderAmount),0) AS totalSalesCount, 
+                DATE_FORMAT(od.updatedAt, "%Y-%m-%d") AS orderDate
+        FROM product_detail_price AS pdp
+        LEFT JOIN order_detail AS od ON pdp.id = od.productPriceId AND od.state = "ACTIVATE" AND od.updatedAt BETWEEN date(#{startDate}) and DATE_ADD(date(#{endDate}), INTERVAL 1 DAY)
+        LEFT JOIN product AS p ON p.`id` = pdp.productId
+        WHERE p.storeId = #{storeId}
+        GROUP BY DATE_FORMAT(od.updatedAt, '%Y-%m-%d'), pdp.`id`
+        ORDER BY orderDate, totalSalesCount DESC;
+    </select>
+</mapper>
