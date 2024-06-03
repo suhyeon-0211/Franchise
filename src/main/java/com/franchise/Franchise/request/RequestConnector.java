@@ -2,6 +2,7 @@ package com.franchise.Franchise.request;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.franchise.Franchise.enums.Role;
 
@@ -26,5 +27,6 @@ public class RequestConnector {
     @NotBlank(message = "직급을 입력해주세요 (ADMIN, MANAGER)")
     private String role;
 
+    @NotNull(message = "매장 번호는 필수 입력 값입니다.")
     private Long storeId;
 }

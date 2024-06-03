@@ -51,13 +51,11 @@ public class SignServiceImpl implements SignService{
     @Override
     public JwtToken signin(SigninRequest request) {
         Optional<Connector> connector = connectorRepository.findByEmailAndPassword(request.getEmail(), SHA256.simple(request.getPassword()));
-        if (!connector.isPresent()) {
+        if (!connector.isPresent() || connector.get().getState().equals(Status.DELETE)) {
             throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_USER);
         }
         if (connector.get().getState().equals(Status.DEACTIVATE)) {
             throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_MATCH_ID_EXCEPTION);
-        } else if (connector.get().getState().equals(Status.DELETE)) {
-            throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_USER);
         }
         JwtToken jwtToken = jwtTokenMaker.tokenMaker(connector.get());
         return jwtToken;

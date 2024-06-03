@@ -64,6 +64,8 @@ public enum BusinessLogicExceptionDefinedReason implements BusinessLogicExceptio
     NOT_FOUND_DATE(HttpStatus.NOT_FOUND, 27000, "시작 및 마지막 날짜의 정보가 없습니다.", "com.sfull.forward.weather.not.found"),
     NOT_VALID_ORDER(HttpStatus.NOT_FOUND, 28000, "재고보다 많은 양을 주문할 수 없습니다.", "com.sfull.forward.weather.not.found"),
     NOT_VALID_PRODUCT_STATE(HttpStatus.NOT_FOUND, 29000, "주문할 수 없는 상태의 제품입니다.", "com.sfull.forward.weather.not.found"),
+    NOT_VALID_PRODUCT_STATE_UPDATE(HttpStatus.NOT_FOUND, 30000, "제품의 상태를 변경할 수 없습니다.", "com.sfull.forward.weather.not.found"),
+    NOT_VALID_ORDER_STATE_UPDATE(HttpStatus.NOT_FOUND, 31000, "결제 상태를 변경할 수 없습니다.", "com.sfull.forward.weather.not.found"),
     ;
 
     private HttpStatus status;

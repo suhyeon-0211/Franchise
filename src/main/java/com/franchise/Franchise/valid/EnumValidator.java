@@ -3,7 +3,7 @@ package com.franchise.Franchise.valid;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, Enum> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, String> {
     private ValidEnum annotation;
 
     @Override
@@ -12,17 +12,16 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Enum> {
     }
 
     @Override
-    public boolean isValid(Enum value, ConstraintValidatorContext context) {
-        boolean result = false;
+    public boolean isValid(String value, ConstraintValidatorContext context) {
         Object[] enumValues = this.annotation.enumClass().getEnumConstants();
         if (enumValues != null) {
             for (Object enumValue : enumValues) {
-                if (value == enumValue) {
-                    result = true;
-                    break;
+                if (value.equals(enumValue.toString())
+                        || (this.annotation.ignoreCase() && value.equalsIgnoreCase(enumValue.toString()))) {
+                    return true;
                 }
             }
         }
-        return result;
+        return false;
     }
 }

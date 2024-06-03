@@ -61,17 +61,13 @@ public class ProductController {
         return GenericResponse.ok(productService.changeStatusProduct(requestProductStatus, userAccessToken));
     }
     
+    @Tag(name = "PRODUCT")
+    @Operation(summary = "상품 통계", description = "상품 판매현황을 보여줍니다.")
     @GetMapping("/statistics")
     public ResponseEntity<GenericResponse<ProductSale>> getStatistics(final @AuthenticationPrincipal UserAccessToken userAccessToken
-                                                                        , RequestStatistics requestStatistics) {
+                                                                        ,@Valid RequestStatistics requestStatistics) {
         // 상품 통계는 삭제된 상품도 조회합니다.
         return GenericResponse.ok(productService.getStatistics(requestStatistics, userAccessToken));
     }
-
-    @GetMapping("/test")
-    public List<Product> test() {
-        return productMapper.selectProductList();
-    }
-    
     
 }

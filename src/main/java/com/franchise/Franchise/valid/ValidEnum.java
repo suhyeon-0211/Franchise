@@ -12,8 +12,9 @@ import javax.validation.Payload;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidEnum {
-    String message() default "Invalid value. This is not permitted";
+    String message() default "허용되지 않은 값입니다. 다시 입력해주세요";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     Class<? extends java.lang.Enum<?>> enumClass();
+    boolean ignoreCase() default false;
 }

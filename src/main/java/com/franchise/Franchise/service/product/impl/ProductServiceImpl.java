@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService{
             if (tempProductDetailPrice.isPresent()) {
                 // 기존에 같은 detailPrice가 있다면 가격, 재고, 상태만 변경해서 update
                 tempProductDetailPrice.get().setPrice(request.getPrice());
-                tempProductDetailPrice.get().setProductAmount(request.getProductAmount());
+                tempProductDetailPrice.get().setProductAmount(tempProductDetailPrice.get().getProductAmount() + request.getProductAmount());
                 tempProductDetailPrice.get().setState(Status.ACTIVATE);
                 productDetailPrice = productDetailPriceRepository.save(tempProductDetailPrice.get());
             } else {
@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService{
         if (!token.getUserRole().equals(Role.ADMIN) && 
                 !token.getTokenConnector().getUser().getStoreId().equals(productDetailPrice.get().getProduct().getStoreId())) {
             // admin이 아니면서 토큰에서 추출한 storeId와 productDetailPrice에서 추출한 storeId가 다르면 Exception
-            throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_ADMIN_USER);
+            throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_VALID_PRODUCT_STATE_UPDATE);
         }
         productDetailPrice.get().setState(Status.valueOf(request.getStatus()));
         ProductDetailPrice tempProductDetailPrice = productDetailPriceRepository.save(productDetailPrice.get());

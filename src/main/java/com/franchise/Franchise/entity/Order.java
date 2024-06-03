@@ -82,8 +82,8 @@ public class Order {
         this.storeId = reqeustOrder.getStoreId();
         this.totalPrice = totalPrice;
         this.totalDiscount  = totalDiscount;
-        this.eatWhere = reqeustOrder.getEatWhere();
-        this.payment = reqeustOrder.getPayment();
+        this.eatWhere = EatWhere.valueOf(reqeustOrder.getEatWhere());
+        this.payment = Payment.valueOf(reqeustOrder.getPayment());
         this.state = Status.ACTIVATE;
         this.orderDetailList = orderDetailList;
     }

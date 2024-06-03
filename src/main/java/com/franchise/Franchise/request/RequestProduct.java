@@ -15,11 +15,11 @@ public class RequestProduct {
     private String name;
 
     @NotNull(message = "가격을 입력해주세요")
-    private int price;
+    private Integer price;
 
     @NotBlank(message = "판매 단위를 입력해주세요")
     private String productUnit;
 
     @NotNull(message = "재고를 입력해주세요")
-    private int productAmount;
+    private Integer productAmount;
 }

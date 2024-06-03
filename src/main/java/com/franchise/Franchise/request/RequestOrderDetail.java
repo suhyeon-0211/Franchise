@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 public class RequestOrderDetail {
 
-    @NotNull(message = "상품 id는 필수 입력입니다.")
+    @NotNull(message = "상품 id는 필수 입력 값입니다.")
     private Long productPriceId;
 
-    @NotNull(message = "구매 개수는 필수 입력입니다.")
-    private int orderAmount;
+    @NotNull(message = "구매 개수는 필수 입력 값입니다.")
+    private Integer orderAmount;
 
     private int discountPrice;
 }

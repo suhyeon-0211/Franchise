@@ -121,7 +121,7 @@ public class OrderServiceImpl implements OrderService{
         OrderDetail orderDetail = orderDetailRepository.findById(requestOrderStatus.getId()).orElseThrow(() -> new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_ORDER));
         if(!token.getUserRole().equals(Role.ADMIN) &&
             !token.getTokenConnector().getUser().getStoreId().equals(orderDetail.getOrder().getStoreId())) {
-                throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_ADMIN_USER);
+                throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_VALID_ORDER_STATE_UPDATE);
         }
         orderDetail.setState(Status.valueOf(requestOrderStatus.getStatus()));
         OrderDetail tempOrderDetail = orderDetailRepository.save(orderDetail);
