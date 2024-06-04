@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.franchise.Franchise.domain.UserAccessToken;
 import com.franchise.Franchise.dto.ProductSale;
-import com.franchise.Franchise.entity.Product;
-import com.franchise.Franchise.mapper.ProductMapper;
 import com.franchise.Franchise.request.RequestProduct;
 import com.franchise.Franchise.request.RequestProductStatus;
 import com.franchise.Franchise.request.RequestStatistics;
@@ -36,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductMapper productMapper;
     
     @PostMapping("/add")
     @Tag(name = "PRODUCT")

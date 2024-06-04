@@ -42,8 +42,6 @@ public class OrderController {
     @Operation(summary = "결제 등록", description = "결제를 등록합니다.")
     @PostMapping("/add")
     public ResponseEntity<GenericResponse<ResponseOrder>> addOrder(final @Validated(ValidationSequence.class) @RequestBody RequestOrder request) {
-        //TODO: process POST request
-        
         return GenericResponse.ok(orderService.addOrder(request));
     }
     

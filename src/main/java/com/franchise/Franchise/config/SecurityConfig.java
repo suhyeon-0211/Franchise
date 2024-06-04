@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.franchise.Franchise.repository.ConnectorRepository;
-import com.franchise.Franchise.repository.UserRepository;
 import com.franchise.Franchise.token.JwtAuthenticationFilter;
 import com.franchise.Franchise.token.JwtTokenMaker;
 import com.franchise.Franchise.token.JwtTokenProvider;

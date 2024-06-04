@@ -52,8 +52,6 @@ public class OrderServiceImpl implements OrderService{
         int totalPrice = 0;
         int totalDiscount = 0;
         for (RequestOrderDetail detail : request.getRequestOrderDetailList()) {
-            // 이렇게 하면 마지막에 id가 없어서 오류가 난 경우에 이미 product_detail_price는 update가 진행되고 난 후
-            // 결제가 들어갈때까지는 product_detail_price는 update가 되면 안됨
             // 실제 있는 상품인지 체크
             ProductDetailPrice productDetailPrice = productDetailPriceRepository.findById(detail.getProductPriceId())
                             .orElseThrow(() -> new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_PRODUCT));
@@ -62,6 +60,7 @@ public class OrderServiceImpl implements OrderService{
             if (productAmount < detail.getOrderAmount()) {
                 throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_VALID_ORDER);
             }
+            // productDetailPrice.toBuilder().productAmount(productAmount - detail.getOrderAmount());
             productDetailPrice.setProductAmount(productAmount - detail.getOrderAmount());
             // 상품의 상태 확인
             if (!productDetailPrice.getState().equals(Status.ACTIVATE)) {
@@ -105,6 +104,10 @@ public class OrderServiceImpl implements OrderService{
                 //throw new BusinessLogicException(BusinessLogicExceptionDefinedReason.NOT_FOUND_ORDER);
                 continue;
             }
+            // responseOrderDetailList = order.getOrderDetailList().stream()
+            //     .filter(orderDetail -> !orderDetail.getState().equals(Status.DELETE))
+            //     .map(ResponseOrderDetail::new)
+            //     .collect(Collectors.toList());
             for (OrderDetail orderDetail : order.getOrderDetailList()) {
                 if(orderDetail.getState().equals(Status.DELETE)) {
                     continue;
@@ -137,6 +140,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public ResponseOrderCompleted getOrderCompleted(RequestStatistics request, UserAccessToken token) {
+        // 선택된 DAY, WEEK, MONTH, YEAR 날짜 지정
         RequestStatistics tempRequest = SetDate.setDate(request, token);
         List<OrderTotalSale> orderTotalSaleList = getOrderTotalSaleList(tempRequest.getStartDate(), tempRequest.getEndDate(), token);
         List<OrderTotalSalePerDay> orderTotalSalePerDayList = getOrderTotalSalePerDayList(tempRequest.getStartDate(), tempRequest.getEndDate(), token);
